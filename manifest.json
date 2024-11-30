@@ -1,22 +1,15 @@
 {
-    "manifest_version": 3,
-    "name": "ScrapeGraphAI - chrome",
-    "version": "0.0.1",
-    "action": {
-        "default_icon": {
-            "16": "public/icons/icon16.png",
-            "24": "public/icons/icon24.png",
-            "32": "public/icons/icon32.png",
-            "48": "public/icons/icon48.png",
-            "64": "public/icons/icon64.png",
-            "128": "public/icons/icon128.png"
-        },
-        "default_popup": "index.html"
+  "manifest_version": 3,
+  "name": "ScrapeGraphAI - chrome",
+  "version": "0.0.1",
+  "action": {
+    "default_icon": {
+      "16": "public/icons/icon16.png",
+      "32": "public/icons/icon32.png",
+      "48": "public/icons/icon48.png",
+      "128": "public/icons/icon128.png"
     },
-    "permissions": [
-        "tabs",
-        "activeTab",
-        "storage",
-        "downloads"
-    ]
+    "default_popup": "index.html"
+  },
+  "permissions": ["tabs", "activeTab", "storage", "downloads"]
 }
