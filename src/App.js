@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Header from './components/Header.js';
+import Header from './components/common/Header.js';
 import Home from './views/Home.js';
 import Settings from './views/Settings.js';
 

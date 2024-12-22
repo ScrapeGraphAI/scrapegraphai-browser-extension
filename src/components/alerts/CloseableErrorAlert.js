@@ -47,7 +47,7 @@ const CloseableErrorAlert = ({ message, onClose }) => {
 
 CloseableErrorAlert.propTypes = {
   message: PropTypes.string.isRequired,
-  onClose: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default CloseableErrorAlert;
