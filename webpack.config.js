@@ -4,10 +4,13 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 
 export default {
-  entry: './src/index.js',
+  entry: {
+    app: './src/index.js',
+    fetchApi: './src/workers/worker.js',
+  },
   output: {
     path: path.resolve('dist'),
-    filename: 'app.js',
+    filename: '[name].js',
     clean: true,
   },
   plugins: [

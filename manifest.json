@@ -11,5 +11,10 @@
     },
     "default_popup": "index.html"
   },
-  "permissions": ["tabs", "activeTab", "storage", "downloads"]
+  "background": {
+    "service_worker": "worker.js",
+    "type": "module"
+  },
+  "permissions": ["tabs", "activeTab", "storage", "downloads", "webRequest", "notifications"],
+  "host_permissions": ["https://api.scrapegraphai.com/v1/*"]
 }
