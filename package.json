@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx webpack",
     "format": "prettier --write .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "zip": "npx webpack && node ./scripts/zip.js"
   },
   "keywords": [],
   "author": "ScrapeGraphAI",
@@ -28,6 +29,7 @@
     "@babel/preset-env": "^7.25.3",
     "@babel/preset-react": "^7.24.7",
     "@eslint/js": "^9.16.0",
+    "archiver": "^7.0.1",
     "babel-loader": "^9.1.3",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^7.1.2",
