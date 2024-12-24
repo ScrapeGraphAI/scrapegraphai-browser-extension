@@ -6,7 +6,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 export default {
   entry: {
     app: './src/index.js',
-    fetchApi: './src/workers/worker.js',
+    worker: './src/workers/worker.js',
   },
   output: {
     path: path.resolve('dist'),
