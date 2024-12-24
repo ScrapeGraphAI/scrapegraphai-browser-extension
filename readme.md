@@ -2,7 +2,7 @@
 
 The official extension for Chromium-based browsers, such as Chrome, Opera, Brave, and others."
 
-![demo](assets/demo.mp4)
+![demo](assets/demo.gif)
 
 ## Installation
 
