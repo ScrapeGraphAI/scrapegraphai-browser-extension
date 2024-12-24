@@ -132,7 +132,7 @@ const Settings = () => {
       <button
         type="button"
         onClick={saveSettings}
-        className="text-white mt-4 bg-green-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+        className="text-white mt-4 bg-dracula-purple hover:bg-dracula-purple-hover font-medium rounded-lg text-sm px-5 py-2.5 text-center">
         Save
       </button>
     </div>
