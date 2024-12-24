@@ -9,7 +9,7 @@ const Settings = () => {
   const [alert, setAlert] = useState({ type: '', visible: false });
 
   useEffect(() => {
-    chrome.storage.sync.get('api_key', ({ api_key }) => {
+    chrome.storage.local.get('api_key', ({ api_key }) => {
       if (api_key) setApiKey(api_key);
     });
   }, []);
@@ -22,7 +22,7 @@ const Settings = () => {
   const handleApiKeyChange = (event) => setApiKey(event.target.value);
 
   const saveSettings = () => {
-    chrome.storage.sync.set({ api_key: apiKey });
+    chrome.storage.local.set({ api_key: apiKey });
     setAlert({ type: 'settingsSaved', visible: true });
   };
 

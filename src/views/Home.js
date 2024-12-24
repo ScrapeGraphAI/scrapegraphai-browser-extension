@@ -18,7 +18,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    chrome.storage.sync.get('api_key', ({ api_key }) => {
+    chrome.storage.local.get('api_key', ({ api_key }) => {
       if (api_key) {
         setApiKey(api_key);
         setScrapeButtonDisabled(false);
