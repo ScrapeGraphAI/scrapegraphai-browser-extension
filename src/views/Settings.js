@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import CloseableSuccessAlert from '../components/alerts/CloseableSuccessAlert.js';
+import CloseableErrorAlert from '../components/alerts/CloseableErrorAlert.js';
 import { Link } from 'react-router-dom';
+import Browser from 'webextension-polyfill';
 
 const Settings = () => {
   const [apiKey, setApiKey] = useState('');
@@ -9,9 +11,19 @@ const Settings = () => {
   const [alert, setAlert] = useState({ type: '', visible: false });
 
   useEffect(() => {
-    chrome.storage.local.get('api_key', ({ api_key }) => {
-      if (api_key) setApiKey(api_key);
-    });
+    (async () => {
+      try {
+        const { api_key } = await Browser.storage.local.get('api_key');
+        setApiKey(api_key);
+      } catch (error) {
+        console.error('Error during storage access:', error);
+        showAlert('storageError');
+      }
+    })();
+  }, []);
+
+  const showAlert = useCallback((type) => {
+    setAlert({ type, visible: true });
   }, []);
 
   const handleApyKeyVisibility = (newVisibility) => {
@@ -21,9 +33,14 @@ const Settings = () => {
 
   const handleApiKeyChange = (event) => setApiKey(event.target.value);
 
-  const saveSettings = () => {
-    chrome.storage.local.set({ api_key: apiKey });
-    setAlert({ type: 'settingsSaved', visible: true });
+  const saveSettings = async () => {
+    try {
+      await Browser.storage.local.set({ api_key: apiKey });
+      showAlert('storageSuccess');
+    } catch (error) {
+      console.error('Error during storage access:', error);
+      showAlert('storageError');
+    }
   };
 
   return (
@@ -52,10 +69,16 @@ const Settings = () => {
         </button>
       </Link>
 
-      {alert.visible && alert.type === 'settingsSaved' && (
+      {alert.visible && alert.type === 'storageSuccess' && (
         <CloseableSuccessAlert
           onClose={() => setAlert({ ...alert, visible: false })}
           message="Settings saved successfully!"
+        />
+      )}
+      {alert.visible && alert.type === 'storageError' && (
+        <CloseableErrorAlert
+          onClose={() => setAlert({ ...alert, visible: false })}
+          message="Something Went Wrong during access the storage!"
         />
       )}
 

@@ -5,6 +5,7 @@ import CloseableSuccessAlert from '../components/alerts/CloseableSuccessAlert.js
 import PromptInput from '../components/PromptInput.js';
 import UrlSelector from '../components/UrlSelector.js';
 import Logo from '../assets/scrapegraphai_logo.svg';
+import Browser from 'webextension-polyfill';
 
 const Home = () => {
   const [scrapingPrompt, setScrapingPrompt] = useState('');
@@ -18,7 +19,13 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    chrome.storage.local.get('api_key', ({ api_key }) => {
+    fetchApiKey();
+    fetchActiveTabUrl();
+  }, []);
+
+  const fetchApiKey = async () => {
+    try {
+      const { api_key } = await Browser.storage.local.get('api_key');
       if (api_key) {
         setApiKey(api_key);
         setScrapeButtonDisabled(false);
@@ -26,12 +33,15 @@ const Home = () => {
         showAlert('apiKeyError');
         setScrapeButtonDisabled(true);
       }
-    });
+    } catch (error) {
+      console.error('Error fetching API key:', error);
+    }
+  };
 
-    chrome.tabs.query({ active: true, currentWindow: true }, ([activeTab]) => {
-      setCurrentTabUrl(activeTab?.url || '');
-    });
-  }, []);
+  const fetchActiveTabUrl = async () => {
+    const [activeTab] = await Browser.tabs.query({ active: true, currentWindow: true });
+    setCurrentTabUrl(activeTab?.url || '');
+  };
 
   const showAlert = (type) => {
     setAlert({ type, visible: true });
@@ -55,20 +65,17 @@ const Home = () => {
 
     try {
       setIsLoading(true);
-      chrome.runtime.sendMessage(
-        {
-          type: 'SCRAPE_REQUEST',
-          payload: { apiKey, targetUrl, scrapingPrompt },
-        },
-        (response) => {
-          setIsLoading(false);
-          if (response.success) {
-            showAlert('requestSuccess');
-          } else {
-            showAlert('requestError');
-          }
-        }
-      );
+      const message = {
+        type: 'SCRAPE_REQUEST',
+        payload: { apiKey, targetUrl, scrapingPrompt },
+      };
+      const response = await Browser.runtime.sendMessage(message);
+      setIsLoading(false);
+      if (response.success) {
+        showAlert('requestSuccess');
+      } else {
+        showAlert('requestError');
+      }
     } catch (error) {
       console.error('Error during scraping request:', error);
       showAlert('requestError');

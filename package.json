@@ -4,10 +4,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "npx webpack",
+    "build:firefox": "webpack --env firefox=true",
+    "build:chromium": "webpack --env chromium=true",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "zip": "npx webpack && node ./scripts/zip.js"
+    "zip:firefox": "webpack --env firefox=true && node ./scripts/zip.js",
+    "zip:chromium": "webpack --env chromium=true && node ./scripts/zip.js"
   },
   "keywords": [],
   "author": "ScrapeGraphAI",
@@ -42,6 +44,7 @@
     "style-loader": "^4.0.0",
     "svg-url-loader": "^8.0.0",
     "terser-webpack-plugin": "^5.3.10",
+    "webextension-polyfill": "^0.12.0",
     "webpack": "^5.93.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
