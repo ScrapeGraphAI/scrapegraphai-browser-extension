@@ -28,7 +28,7 @@ const PromptInput = ({ scrapingPrompt, setScrapingPrompt, validationError }) => 
         className={`block w-full mt-2 p-2.5 text-sm text-gray-900 rounded-lg border ${
           validationError || isPromptEmpty
             ? 'bg-red-50 border-red-500 focus:outline-red-500 focus:ring-red-500'
-            : 'bg-gray-50 border-gray-300 focus:outline-blue-500 focus:ring-blue-500'
+            : 'bg-gray-50 border-gray-300 focus:outline-purple-500 focus:ring-purple-500'
         }`}
         placeholder="Enter scraping instructions..."
       />

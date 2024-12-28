@@ -121,7 +121,7 @@ const Home = () => {
       <button
         onClick={handleScrapeRequest}
         type="button"
-        className="text-white mt-4 bg-dracula-purple hover:bg-dracula-purple-hover disabled:bg-dracula-purple-disabled font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        className="text-white mt-4 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         disabled={isScrapeButtonDisabled}>
         Scrape
       </button>
