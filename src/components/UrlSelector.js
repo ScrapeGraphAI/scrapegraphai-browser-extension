@@ -36,7 +36,7 @@ const UrlSelector = ({
               name="url-options"
               checked={urlOption === 'autoWebsiteUrl'}
               onChange={(e) => setUrlOption(e.target.value)}
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+              className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500"
             />
             <div>
               <label htmlFor="current-tab-url" className="w-full ms-2 text-sm font-medium text-gray-900">
@@ -59,7 +59,7 @@ const UrlSelector = ({
               name="url-options"
               checked={urlOption === 'customWebsiteUrl'}
               onChange={(e) => setUrlOption(e.target.value)}
-              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+              className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500"
             />
             <label htmlFor="custom-url" className="w-full py-3 ms-2 text-sm font-medium text-gray-900">
               Use custom URL
@@ -77,7 +77,7 @@ const UrlSelector = ({
                 className={`block w-full mt-2 p-2.5 text-sm text-gray-900 rounded-lg border ${
                   validationError || isUrlFieldEmpty
                     ? 'bg-red-50 border-red-500 focus:outline-red-500 focus:ring-red-500'
-                    : 'bg-gray-50 border-gray-300 focus:outline-blue-500 focus:ring-blue-500'
+                    : 'bg-gray-50 border-gray-300 focus:outline-purple-500 focus:ring-purple-500'
                 }`}
                 placeholder="https://example.com"
               />
