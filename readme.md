@@ -43,7 +43,7 @@ If you want to build the extension from source:
 1. Clone the repository:
 ```bash
 git clone https://github.com/ScrapeGraphAI/scrapegraphai-browser-extension.git
-cd scrapegraphai-chrome
+cd scrapegraphai-browser-extension
 ```
 
 2. Install dependencies:
