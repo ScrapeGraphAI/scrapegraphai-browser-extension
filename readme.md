@@ -24,7 +24,7 @@ Watch our [video tutorial](https://www.youtube.com/watch?v=tSy8udRu1lA) for a st
 
 ### 2. Manual Installation (Development Build)
 
-1. Download the latest `scrapegraphai_extension.zip` from the [Releases page](https://github.com/yourusername/scrapegraphai-chrome/releases)
+1. Download the latest `scrapegraphai_extension.zip` from the [Releases page](https://github.com/ScrapeGraphAI/scrapegraphai-browser-extension/releases)
 2. Extract the ZIP file to a folder on your computer
 3. For Chrome/Chromium browsers:
    - Go to `chrome://extensions/`
@@ -42,7 +42,7 @@ If you want to build the extension from source:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/scrapegraphai-chrome.git
+git clone https://github.com/ScrapeGraphAI/scrapegraphai-browser-extension.git
 cd scrapegraphai-chrome
 ```
 
@@ -66,7 +66,7 @@ npm run build:firefox     # For Firefox browser
 1. **Setup**
    - After installing the extension, click on its icon in your browser's toolbar
    - Go to Settings and enter your ScrapeGraphAI API key
-   - If you don't have an API key, get one from [ScrapeGraphAI website]
+   - If you don't have an API key, get one from [ScrapeGraphAI website](https://scrapegraphai.com/)
 
 2. **Basic Usage**
    - Navigate to any webpage you want to scrape
@@ -77,7 +77,7 @@ npm run build:firefox     # For Firefox browser
 3. **Advanced Options**
    - Use "Custom URL" if you want to scrape a different page than the current one
    - The extension will notify you when the scraping is complete
-   - Check your ScrapeGraphAI dashboard for the scraped data
+   - Check your ScrapeGraphAI dashboard and dowload folder for the scraped data
 
 4. **Tips**
    - Be specific in your scraping instructions
