@@ -15,6 +15,6 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "permissions": ["tabs", "storage", "downloads", "webRequest", "notifications"],
+  "permissions": ["tabs", "storage", "downloads", "notifications"],
   "host_permissions": ["https://api.scrapegraphai.com/v1/*"]
 }
