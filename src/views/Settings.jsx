@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Eye, EyeSlash, ApiKey } from 'flowbite-react-icons/outline';
 import useAlert from '../hooks/useAlert.js';
 import useApiKey from '../hooks/useApiKey.js';
+import CreditsInfo from '../components/CreditsInfo.jsx';
 
 const Settings = () => {
   const [toggleInputType, setToggleInputType] = useState(false);
@@ -13,7 +14,7 @@ const Settings = () => {
 
   useEffect(() => {
     if (apiKeyError) showAlert('error', apiKeyError, false);
-  }, [apiKeyError]);
+  }, [apiKeyError, apiKey]);
 
   const handleApiKeyChange = (event) => setApiKey(event.target.value);
 
@@ -27,11 +28,13 @@ const Settings = () => {
       <Link to="/">
         <button
           type="button"
-          className="text-gray-600 p-0 mb-6 inline-flex items-center hover:text-gray-400 font-bold rounded-lg text-sm text-center">
+          className="text-gray-600 p-0 mb-2 inline-flex items-center hover:text-gray-400 font-bold rounded-lg text-sm text-center">
           <ArrowLeft />
           <span>Turn back</span>
         </button>
       </Link>
+
+      <hr className="mb-4" />
 
       {alert.visible && (
         <Alert
@@ -42,11 +45,17 @@ const Settings = () => {
         />
       )}
 
+      {!apiKeyError && apiKey && (
+        <div className="mb-4">
+          <CreditsInfo />
+        </div>
+      )}
+
       {/* API key input */}
       <label htmlFor="api-key" className="block mb-2 text-sm font-bold text-gray-900">
         Set your API key
       </label>
-      <div className="flex">
+      <div className="flex mb-2">
         <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-l-md border-gray-300">
           <ApiKey />
         </span>
@@ -71,10 +80,11 @@ const Settings = () => {
           </button>
         </div>
       </div>
+
       <button
         type="button"
         onClick={handleSave}
-        className="text-white mt-4 bg-dracula-purple hover:bg-dracula-purple-hover font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+        className="text-white bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
         Save
       </button>
     </div>
