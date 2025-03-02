@@ -13,7 +13,7 @@
   },
   "keywords": [],
   "author": "ScrapeGraphAI",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "description": "",
   "dependencies": {
     "autoprefixer": "^10.4.20",
