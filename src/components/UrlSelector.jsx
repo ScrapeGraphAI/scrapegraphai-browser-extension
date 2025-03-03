@@ -1,22 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import TextField from './ui/TextField.jsx';
 
-const UrlSelector = ({
-  urlOption,
-  setUrlOption,
-  currentTabUrl,
-  customUrl,
-  setCustomUrl,
-  validationError,
-}) => {
-  const [isUrlFieldEmpty, setIsUrlFieldEmpty] = useState(false);
-
-  const handleUrlFieldInput = (inputUrl) => {
-    if (!inputUrl.trim()) {
-      setIsUrlFieldEmpty(true);
-    } else {
-      setIsUrlFieldEmpty(false);
-    }
+const UrlSelector = ({ urlOption, setUrlOption, currentTabUrl, customUrl, setCustomUrl, customUrlError }) => {
+  const handleUrlOptionChange = (event) => {
+    setUrlOption(event.target.value);
   };
 
   return (
@@ -35,7 +23,7 @@ const UrlSelector = ({
               value="autoWebsiteUrl"
               name="url-options"
               checked={urlOption === 'autoWebsiteUrl'}
-              onChange={(e) => setUrlOption(e.target.value)}
+              onChange={handleUrlOptionChange}
               className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500"
             />
             <div>
@@ -58,7 +46,7 @@ const UrlSelector = ({
               value="customWebsiteUrl"
               name="url-options"
               checked={urlOption === 'customWebsiteUrl'}
-              onChange={(e) => setUrlOption(e.target.value)}
+              onChange={handleUrlOptionChange}
               className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500"
             />
             <label htmlFor="custom-url" className="w-full py-3 ms-2 text-sm font-medium text-gray-900">
@@ -67,23 +55,14 @@ const UrlSelector = ({
           </div>
           {urlOption === 'customWebsiteUrl' && (
             <div className="px-5 pb-5">
-              <input
+              <TextField
                 type="url"
                 value={customUrl}
-                onChange={(e) => {
-                  setCustomUrl(e.target.value);
-                  handleUrlFieldInput(e.target.value);
-                }}
-                className={`block w-full mt-2 p-2.5 text-sm text-gray-900 rounded-lg border ${
-                  validationError || isUrlFieldEmpty
-                    ? 'bg-red-50 border-red-500 focus:outline-red-500 focus:ring-red-500'
-                    : 'bg-gray-50 border-gray-300 focus:outline-purple-500 focus:ring-purple-500'
-                }`}
+                onChange={setCustomUrl}
                 placeholder="https://example.com"
+                onError={customUrlError}
+                onErrorMessage="Please enter a valid URL!"
               />
-              {(validationError || isUrlFieldEmpty) && (
-                <p className="mt-1 text-xs text-red-600">Please enter a valid URL!</p>
-              )}
             </div>
           )}
         </li>
@@ -98,7 +77,7 @@ UrlSelector.propTypes = {
   currentTabUrl: PropTypes.string.isRequired,
   customUrl: PropTypes.string.isRequired,
   setCustomUrl: PropTypes.func.isRequired,
-  validationError: PropTypes.bool.isRequired,
+  customUrlError: PropTypes.bool.isRequired,
 };
 
 export default UrlSelector;

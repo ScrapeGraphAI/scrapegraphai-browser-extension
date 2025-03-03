@@ -1,64 +1,81 @@
-import { smartScraper } from 'scrapegraph-js';
+import { smartScraper, markdownify } from 'scrapegraph-js';
 import Browser from 'webextension-polyfill';
 
 Browser.runtime.onMessage.addListener(async (request) => {
-  if (request.type === 'SCRAPE_REQUEST') {
-    try {
-      const data = await smartScraper(
-        request.payload.apiKey,
-        request.payload.targetUrl,
-        request.payload.scrapingPrompt
-      );
-      await downloadJsonFile(data);
-      sendNotification('Success!', 'Download successful! Your file is ready.');
-      return Promise.resolve({ success: true });
-    } catch (error) {
-      sendNotification('Something Went Wrong', error.message);
-      return Promise.resolve({ success: false, error: error.message });
+  if (!request?.type || !request?.payload) return true;
+
+  const { type, payload } = request;
+  const { apiKey, targetUrl } = payload;
+  let fileData, fileExtension;
+
+  try {
+    if (type === 'SMARTSCRAPER_REQUEST') {
+      fileData = JSON.stringify(await smartScraper(apiKey, targetUrl, payload.scrapingPrompt), null, 2);
+      fileExtension = 'json';
+    } else if (type === 'MARKDOWNIFY_REQUEST') {
+      fileData = (await markdownify(apiKey, targetUrl)).result;
+      fileExtension = 'md';
+    } else {
+      return true;
     }
+
+    const fileName = generateFileName(fileExtension, targetUrl);
+    await downloadFile(fileData, fileName, type);
+    sendNotification('Success!', 'Download successful! Your file is ready.');
+    return { success: true };
+  } catch (error) {
+    sendNotification('Something Went Wrong', error.message);
+    return { success: false, error: error.message };
   }
-  return true;
 });
 
 function sendNotification(title, message) {
-  const notificationOption = {
+  Browser.notifications.create(null, {
     type: 'basic',
     iconUrl: './public/icons/icon128.png',
-    message: message,
-    title: title,
-  };
-  Browser.notifications.create(null, notificationOption);
+    message,
+    title,
+  });
 }
 
-async function downloadJsonFile(data) {
-  const jsonData = JSON.stringify(data, null, 2);
-  if (typeof URL.createObjectURL === 'undefined') {
-    // Chromium service worker
-    const dataUrl = `data:application/json;charset=utf-8,${encodeURIComponent(jsonData)}`;
-    try {
-      await Browser.downloads.download({
-        url: dataUrl,
-        filename: 'scraped_data.json',
-      });
-    } catch (error) {
-      console.error('Download error:', error);
-      throw error;
-    }
+async function downloadFile(fileData, fileName, requestType) {
+  const isChromium = typeof URL.createObjectURL === 'undefined';
+  let dataUrl = null;
+  if (isChromium) {
+    dataUrl =
+      requestType === 'MARKDOWNIFY_REQUEST'
+        ? getDataUrl(fileData, 'text/markdown')
+        : getDataUrl(fileData, 'application/json');
   } else {
-    // Firefox background script
-    const blob = new Blob([jsonData], { type: 'application/json' });
-    const blobUrl = URL.createObjectURL(blob);
-
-    try {
-      await Browser.downloads.download({
-        url: blobUrl,
-        filename: 'scraped_data.json',
-      });
-    } catch (error) {
-      console.error('Download error:', error);
-      throw error;
-    } finally {
-      URL.revokeObjectURL(blobUrl);
-    }
+    dataUrl =
+      requestType === 'MARKDOWNIFY_REQUEST'
+        ? getBlobUrl(fileData, 'text/markdown')
+        : getBlobUrl(fileData, 'application/json');
   }
+
+  try {
+    await Browser.downloads.download({
+      url: dataUrl,
+      filename: fileName,
+    });
+  } finally {
+    if (!isChromium) URL.revokeObjectURL(dataUrl);
+  }
+}
+
+function getBlobUrl(data, type) {
+  return URL.createObjectURL(new Blob([data], { type }));
+}
+
+function getDataUrl(data, type) {
+  return `data:${type};charset=utf-8,${encodeURIComponent(data)}`;
+}
+
+function generateFileName(extension, url) {
+  const now = new Date();
+  const date = now.toISOString().split('T')[0];
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const hostname = new URL(url).hostname.split('.').slice(0, -1).join('-');
+  return `scraped-data_${hostname}_${date}_${hours}-${minutes}.${extension}`;
 }
