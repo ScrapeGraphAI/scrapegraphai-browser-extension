@@ -1,25 +1,33 @@
-import { smartScraper, markdownify } from 'scrapegraph-js';
+import { smartScraper, markdownify, searchScraper } from 'scrapegraph-js';
 import Browser from 'webextension-polyfill';
 
 Browser.runtime.onMessage.addListener(async (request) => {
+  console.log(request);
   if (!request?.type || !request?.payload) return true;
 
   const { type, payload } = request;
-  const { apiKey, targetUrl } = payload;
+  const { apiKey } = payload;
   let fileData, fileExtension;
 
   try {
     if (type === 'SMARTSCRAPER_REQUEST') {
-      fileData = JSON.stringify(await smartScraper(apiKey, targetUrl, payload.scrapingPrompt), null, 2);
+      fileData = JSON.stringify(
+        await smartScraper(apiKey, payload.targetUrl, payload.scrapingPrompt),
+        null,
+        2
+      );
       fileExtension = 'json';
     } else if (type === 'MARKDOWNIFY_REQUEST') {
-      fileData = (await markdownify(apiKey, targetUrl)).result;
+      fileData = (await markdownify(apiKey, payload.targetUrl)).result;
       fileExtension = 'md';
+    } else if (type === 'SEARCHSCRAPER_REQUEST') {
+      fileData = JSON.stringify(await searchScraper(apiKey, payload.scrapingPrompt), null, 2);
+      fileExtension = 'json';
     } else {
       return true;
     }
 
-    const fileName = generateFileName(fileExtension, targetUrl);
+    const fileName = generateFileName(fileExtension, payload.targetUrl);
     await downloadFile(fileData, fileName, type);
     sendNotification('Success!', 'Download successful! Your file is ready.');
     return { success: true };
@@ -76,6 +84,9 @@ function generateFileName(extension, url) {
   const date = now.toISOString().split('T')[0];
   const hours = String(now.getHours()).padStart(2, '0');
   const minutes = String(now.getMinutes()).padStart(2, '0');
+
+  if (!url) return `scraped-data_SearchScrapeModel_${date}_${hours}-${minutes}.${extension}`;
+
   const hostname = new URL(url).hostname.split('.').slice(0, -1).join('-');
   return `scraped-data_${hostname}_${date}_${hours}-${minutes}.${extension}`;
 }

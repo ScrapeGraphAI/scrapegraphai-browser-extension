@@ -49,7 +49,7 @@ const Home = () => {
   };
 
   const handleScrapeRequest = async () => {
-    if (selectedModel === 'smartScraper') {
+    if (selectedModel === 'smartScraper' || selectedModel === 'searchScraper') {
       if (!scrapingPrompt.trim()) {
         setScrapingPromptError(true);
         return;
@@ -64,6 +64,7 @@ const Home = () => {
     try {
       setIsLoading(true);
       const message = createScrapeMessage(selectedModel, targetUrl);
+      console.log(message);
       const response = await Browser.runtime.sendMessage(message);
       setIsLoading(false);
       if (response.success) {
@@ -94,6 +95,11 @@ const Home = () => {
           type: 'MARKDOWNIFY_REQUEST',
           payload: { apiKey, targetUrl },
         };
+      case 'searchScraper':
+        return {
+          type: 'SEARCHSCRAPER_REQUEST',
+          payload: { apiKey, scrapingPrompt },
+        };
       default:
         throw new Error('Invalid scraping model selected.');
     }
@@ -114,18 +120,20 @@ const Home = () => {
         <ModelSelector value={selectedModel} onChange={setSelectedModel} />
       </div>
 
-      <div className="mb-4">
-        <UrlSelector
-          urlOption={urlOption}
-          setUrlOption={setUrlOption}
-          currentTabUrl={currentTabUrl}
-          customUrl={customUrl}
-          setCustomUrl={handleCustomUrlChange}
-          customUrlError={customUrlError}
-        />
-      </div>
+      {(selectedModel === 'smartScraper' || selectedModel === 'markdownify') && (
+        <div className="mb-4">
+          <UrlSelector
+            urlOption={urlOption}
+            setUrlOption={setUrlOption}
+            currentTabUrl={currentTabUrl}
+            customUrl={customUrl}
+            setCustomUrl={handleCustomUrlChange}
+            customUrlError={customUrlError}
+          />
+        </div>
+      )}
 
-      {selectedModel === 'smartScraper' && (
+      {(selectedModel === 'smartScraper' || selectedModel === 'searchScraper') && (
         <div className="mb-4">
           <TextArea
             value={scrapingPrompt}
