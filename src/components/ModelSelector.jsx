@@ -15,9 +15,9 @@ const ModelSelector = ({ value, onChange }) => {
         Select scraping model
       </label>
       <div
-        className="items-center flex justify-between w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg"
+        className="items-center py-3 flex justify-between w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg"
         id="model-options">
-        <div className="w-1/2 border-r border-gray-200">
+        <div className="w-1/3 border-r border-gray-200">
           <div className="flex items-center ps-3">
             <input
               id="smart-scraper"
@@ -34,11 +34,24 @@ const ModelSelector = ({ value, onChange }) => {
           </div>
         </div>
 
-        <div className="flex items-center justify-center w-1/12 border-gray-200">
-          <div className="h-full border-r border-gray-200" />
+        <div className="w-1/3 border-r border-gray-200">
+          <div className="flex items-center ps-3">
+            <input
+              id="searchScraper"
+              type="radio"
+              value="searchScraper"
+              name="model-options"
+              checked={selectedModel === 'searchScraper'}
+              onChange={handleModelChange}
+              className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500"
+            />
+            <label htmlFor="searchScraper" className="w-full ms-2 text-sm font-medium text-gray-900">
+              Search Scraper
+            </label>
+          </div>
         </div>
 
-        <div className="w-1/2">
+        <div className="w-1/3">
           <div className="flex items-center ps-3">
             <input
               id="markdownify"
@@ -49,7 +62,7 @@ const ModelSelector = ({ value, onChange }) => {
               onChange={handleModelChange}
               className="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 focus:ring-purple-500"
             />
-            <label htmlFor="markdownify" className="w-full py-3 ms-2 text-sm font-medium text-gray-900">
+            <label htmlFor="markdownify" className="w-full ms-2 text-sm font-medium text-gray-900">
               Markdownify
             </label>
           </div>
@@ -60,7 +73,7 @@ const ModelSelector = ({ value, onChange }) => {
 };
 
 ModelSelector.propTypes = {
-  value: PropTypes.oneOf(['smartScraper', 'markdownify']).isRequired,
+  value: PropTypes.oneOf(['smartScraper', 'searchScraper', 'markdownify']).isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
